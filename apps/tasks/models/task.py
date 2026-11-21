@@ -12,28 +12,35 @@ class Status(models.TextChoices):
 
 
 class Task(UUIDv7Model, TimeStampedModel):
-    title = models.CharField(max_length=255,unique_for_date='created_at')
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=255, unique=True, verbose_name="Название задачи")
+    description = models.TextField(blank=True, verbose_name="Описание задачи")
     categories = models.ManyToManyField(
         "Category",
         blank=True,
         related_name="tasks",
+        verbose_name="Категории задачи",
     )
     status = models.CharField(
         max_length=15,
         choices=Status.choices,
         default=Status.NEW,
+        verbose_name="Статус задачи",
     )
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(verbose_name="Дата и время дедлайна")
 
     class Meta:
-        db_table = "task_manager_task"
-        ordering = ["deadline"]
-        verbose_name = "Task"
-        verbose_name_plural = "Tasks"
+        db_table = 'task_manager_task'
+        ordering = ('-created_at',)
+        verbose_name = 'Task'
+        verbose_name_plural = 'Tasks'
+        constraints = [
+            models.UniqueConstraint('title', 'created_at',
+                                    name='unique_title_by_creation_date',
+                                    violation_error_message='Такая задача уже существует')
+        ]
 
     def __str__(self):
-        return f'Task {self.title}'
+        return self.title
 
     def __repr__(self):
         return (f'<Task(id={self.id}, title={self.title}, description={self.description},'

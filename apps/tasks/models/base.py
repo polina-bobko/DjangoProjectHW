@@ -4,16 +4,21 @@ from django.db import models
 
 
 class UUIDv7Model(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid7, editable=False)
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid7,
+        editable=False,
+        verbose_name="Идентификатор",
+    )
 
     class Meta:
         abstract = True
 
 
 class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата и время создания")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата и время обновления")
+    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата и время удаления")
 
     class Meta:
         abstract = True

@@ -5,28 +5,33 @@ from .task import Task, Status
 
 
 class SubTask(UUIDv7Model, TimeStampedModel):
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=255, unique=True, verbose_name="Название подзадачи")
+    description = models.TextField(blank=True, verbose_name="Описание подзадачи")
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
         related_name="subtasks",
+        verbose_name="Основная задача",
     )
     status = models.CharField(
         max_length=15,
         choices=Status.choices,
         default=Status.NEW,
+        verbose_name="Статус подзадачи",
     )
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(verbose_name="Дата и время дедлайна")
 
     class Meta:
-        db_table = "task_manager_subtask"
-        ordering = ["deadline"]
-        verbose_name = "SubTask"
-        verbose_name_plural = "SubTasks"
+        db_table = 'task_manager_subtask'
+        ordering = ('-created_at',)
+        verbose_name = 'SubTask'
+        verbose_name_plural = 'SubTasks'
+        constraints = [models.UniqueConstraint('title', 'created_at',
+                                               name='unique_subtask_title_by_creation_date',
+                                               violation_error_message='Такая сабтаска уже существует')]
 
     def __str__(self):
-        return f'Subtask {self.title}'
+        return self.title
 
     def __repr__(self):
         return (f'SubTask(id={self.id}, title={self.title}, description={self.description},'
