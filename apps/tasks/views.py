@@ -37,11 +37,37 @@ def create_task(request):
 @api_view(["GET"])
 def task_list(request):
     tasks = Task.objects.all()
+
+    weekday = request.query_params.get("weekday")
+
+    if weekday:
+        weekdays = {
+            "monday": 2,
+            "tuesday": 3,
+            "wednesday": 4,
+            "thursday": 5,
+            "friday": 6,
+            "saturday": 7,
+            "sunday": 1,
+        }
+
+        weekday = weekday.strip().lower()
+
+        if weekday not in weekdays:
+            return Response(
+                {"error": "Invalid weekday"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        tasks = tasks.filter(
+            deadline__week_day=weekdays[weekday]
+        )
+
     serializer = TaskSerializer(tasks, many=True)
 
     return Response(
         serializer.data,
-        status=status.HTTP_200_OK,
+        status=status.HTTP_200_OK
     )
 
 
