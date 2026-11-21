@@ -1,4 +1,3 @@
-
 import os
 from datetime import timedelta
 
@@ -127,8 +126,8 @@ def delete_records():
 
 
 if __name__ == "__main__":
-    create_records()
-    read_records()
-    update_records()
-    delete_records()
-    #pass
+    # create_records()
+    # read_records()
+    # update_records()
+    # delete_records()
+    pass

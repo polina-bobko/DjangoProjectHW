@@ -8,13 +8,17 @@ from rest_framework.response import Response
 
 from .models import Task
 from .models.task import Status
-from .serializers import TaskSerializer
+from .serializers import (
+    TaskSerializer,
+    TaskDetailSerializer,
+    TaskCreateSerializer,
+)
 
 
 # Задание 1: создание задачи
 @api_view(["POST"])
 def create_task(request):
-    serializer = TaskSerializer(data=request.data)
+    serializer = TaskCreateSerializer(data=request.data)
 
     if serializer.is_valid():
         serializer.save()
@@ -45,7 +49,7 @@ def task_list(request):
 @api_view(["GET"])
 def task_detail(request, pk):
     task = get_object_or_404(Task, pk=pk)
-    serializer = TaskSerializer(task)
+    serializer = TaskDetailSerializer(task)
 
     return Response(
         serializer.data,
