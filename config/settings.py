@@ -38,15 +38,21 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 # Application definition
 
 INSTALLED_APPS = [
+    # Django applications
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third-party applications
+    'rest_framework',
+    'django_filters',
+
+    # Local applications
     'apps.hello.apps.HelloConfig',
     'apps.tasks.apps.TasksConfig',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
