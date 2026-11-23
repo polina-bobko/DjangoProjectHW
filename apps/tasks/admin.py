@@ -57,5 +57,34 @@ class SubTaskAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name",)
-    search_fields = ("name",)
+
+    list_display = (
+        "name",
+        "show_is_deleted",
+        "deleted_at",
+    )
+
+    ordering = ("-name",)
+
+    list_filter = (
+        ("deleted_at", admin.EmptyFieldListFilter),
+    )
+
+    readonly_fields = (
+        "is_deleted",
+        "deleted_at",
+    )
+
+    @admin.display(
+        boolean=True,
+        description="Deleted?",
+    )
+    def show_is_deleted(self, category):
+        return category.is_deleted
+
+    def get_queryset(self, request):
+        return Category.all_objects.all().order_by("-name")
+
+    def delete_queryset(self, request, queryset):
+        for category in queryset:
+            category.delete()

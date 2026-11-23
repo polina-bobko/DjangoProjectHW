@@ -9,4 +9,7 @@ from .subtask import (
     SubTaskCreateSerializer,
 )
 
-from .category import CategoryCreateSerializer
+from .category import (
+    CategorySerializer,
+    CategoryCreateSerializer,
+)

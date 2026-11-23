@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("hello/", include("apps.hello.urls")),
     path("api/", include("apps.tasks.urls")),
+    path("api/", include("apps.tasks.viewset_urls")),
 ]
