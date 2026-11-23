@@ -64,6 +64,8 @@ class CategoryAdmin(admin.ModelAdmin):
         "deleted_at",
     )
 
+    search_fields = ("name",)
+
     ordering = ("-name",)
 
     list_filter = (
