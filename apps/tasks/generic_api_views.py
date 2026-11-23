@@ -17,8 +17,6 @@ from .serializers import (
     SubTaskCreateSerializer,
 )
 
-from .paginators import TaskPaginator, SubTaskPaginator
-
 
 # Tasks: получение списка и создание
 class TaskListCreateView(ListCreateAPIView):
@@ -27,7 +25,6 @@ class TaskListCreateView(ListCreateAPIView):
     ).all()
 
     serializer_class = TaskSerializer
-    pagination_class = TaskPaginator
 
     filter_backends = [
         DjangoFilterBackend,
@@ -70,7 +67,6 @@ class SubTaskListCreateView(ListCreateAPIView):
     queryset = SubTask.objects.select_related("task").all()
 
     serializer_class = SubTaskSerializer
-    pagination_class = SubTaskPaginator
 
     filter_backends = [
         DjangoFilterBackend,

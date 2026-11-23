@@ -40,13 +40,27 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def count_tasks(self, request):
         categories = self.get_queryset().annotate(
             tasks_count=Count("tasks", distinct=True)
-        ).values(
-            "id",
-            "name",
-            "tasks_count",
         )
 
+        page = self.paginate_queryset(categories)
+
+        if page is not None:
+            data = [
+                {
+                    "id": category.id,
+                    "name": category.name,
+                    "tasks_count": category.tasks_count,
+                }
+                for category in page
+            ]
+
+            return self.get_paginated_response(data)
+
         return Response(
-            list(categories),
+            list(categories.values(
+                "id",
+                "name",
+                "tasks_count",
+            )),
             status=status.HTTP_200_OK,
         )

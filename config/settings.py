@@ -16,6 +16,13 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOGS_DIR = BASE_DIR / "logs"
+
+LOGS_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
 env = environ.Env(
     DEBUG=(bool, False),
     MYSQL=(bool, False),
@@ -151,5 +158,90 @@ STATIC_URL = 'static/'
 MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    },
+}
+
+# Pagination
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": (
+        "apps.core.paginators.CommonPaginator"
+    ),
+    "PAGE_SIZE": 6,
+}
+
+# Logging
+LOGGING = {
+    "version": 1,
+
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "verbose": {
+            "format": (
+                "{levelname} {asctime} "
+                "{name} {message}"
+            ),
+            "style": "{",
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+
+        "http_file": {
+            "level": "INFO",
+            "class": (
+                "logging.handlers.RotatingFileHandler"
+            ),
+            "filename": LOGS_DIR / "http_logs.log",
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "verbose",
+        },
+
+        "db_file": {
+            "level": "DEBUG",
+            "class": (
+                "logging.handlers.RotatingFileHandler"
+            ),
+            "filename": LOGS_DIR / "db_logs.log",
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "verbose",
+        },
+    },
+
+    "loggers": {
+        "django.server": {
+            "handlers": [
+                "console",
+                "http_file",
+            ],
+            "level": "INFO",
+            "propagate": False,
+        },
+
+        "django.db.backends": {
+            "handlers": ["console", "db_file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
     },
 }
