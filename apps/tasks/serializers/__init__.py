@@ -13,3 +13,5 @@ from .category import (
     CategorySerializer,
     CategoryCreateSerializer,
 )
+
+from .user import RegisterSerializer
