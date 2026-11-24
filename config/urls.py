@@ -22,4 +22,5 @@ urlpatterns = [
     path("hello/", include("apps.hello.urls")),
     path("api/", include("apps.tasks.urls")),
     path("api/", include("apps.tasks.viewset_urls")),
+    path("api/", include("apps.tasks.token_urls")),
 ]

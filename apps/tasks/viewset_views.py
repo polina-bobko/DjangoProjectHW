@@ -11,6 +11,7 @@ from apps.tasks.serializers import (
     CategoryCreateSerializer,
 )
 
+from rest_framework.filters import OrderingFilter
 
 class CategoryViewSet(viewsets.ModelViewSet):
 
@@ -20,6 +21,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
     )
 
     serializer_class = CategorySerializer
+
+    filter_backends = [OrderingFilter]
+    ordering_fields = ["id", "name"]
+    ordering = ["name"]
 
     def get_serializer_class(self):
         if self.action in (
