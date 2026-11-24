@@ -179,6 +179,7 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+DEFAULT_FROM_EMAIL = "support@taskmanager.com"
 
 # Pagination + Authentication
 REST_FRAMEWORK = {
