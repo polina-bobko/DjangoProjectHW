@@ -14,6 +14,13 @@ class SubTaskSerializer(serializers.ModelSerializer):
             "deadline",
             "created_at",
             "updated_at",
+            "owner",
+        ]
+        read_only_fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "owner",
         ]
 
 
@@ -31,4 +38,18 @@ class SubTaskCreateSerializer(serializers.ModelSerializer):
             "deadline",
             "created_at",
             "updated_at",
+            "owner",
         ]
+        read_only_fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "owner",
+        ]
+
+    def validate_task(self, value):
+        if value.owner_id != self.context["request"].user.pk:
+            raise serializers.ValidationError(
+                "You can only assign subtasks to your own tasks."
+            )
+        return value

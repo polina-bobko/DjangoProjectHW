@@ -7,7 +7,7 @@ from django.urls import path
 #     task_statistics,
 # )
 
-
+from .generic_api_views import CurrentUserTasksView
 from . import views as tasks_
 
 from .generic_api_views import (
@@ -80,5 +80,10 @@ urlpatterns = [
         "subtasks/<uuid:pk>/",
         SubTaskDetailUpdateDeleteView.as_view(),
         name="subtask-get-update-delete",
+    ),
+    path(
+        "my/tasks/",
+        CurrentUserTasksView.as_view(),
+        name="owner-get-all-tasks",
     ),
 ]

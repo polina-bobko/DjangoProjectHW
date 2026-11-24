@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
+    'drf_yasg',
 
     # Local applications
     'apps.hello.apps.HelloConfig',
@@ -180,7 +181,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
@@ -259,4 +260,17 @@ LOGGING = {
         "handlers": ["console"],
         "level": "WARNING",
     },
+}
+
+#Swagger
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Enter: Bearer <access_token>",
+        },
+    },
+    "USE_SESSION_AUTH": False,
 }

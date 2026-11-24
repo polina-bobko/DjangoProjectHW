@@ -2,7 +2,7 @@ from django.db import models
 
 from .base import TimeStampedModel, UUIDv7Model
 from .task import Task, Status
-
+from django.conf import settings
 
 class SubTask(UUIDv7Model, TimeStampedModel):
     title = models.CharField(max_length=255, unique=True, verbose_name="Название подзадачи")
@@ -20,6 +20,12 @@ class SubTask(UUIDv7Model, TimeStampedModel):
         verbose_name="Статус подзадачи",
     )
     deadline = models.DateTimeField(verbose_name="Дата и время дедлайна")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="subtasks",
+        verbose_name="Владелец подзадачи",
+    )
 
     class Meta:
         db_table = 'task_manager_subtask'

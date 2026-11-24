@@ -2,6 +2,7 @@ from django.db import models
 
 from .base import TimeStampedModel, UUIDv7Model
 
+from django.conf import settings
 
 class Status(models.TextChoices):
     NEW = "new", "New"
@@ -27,6 +28,12 @@ class Task(UUIDv7Model, TimeStampedModel):
         verbose_name="Статус задачи",
     )
     deadline = models.DateTimeField(verbose_name="Дата и время дедлайна")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="tasks",
+        verbose_name="Владелец задачи",
+    )
 
     class Meta:
         db_table = 'task_manager_task'
